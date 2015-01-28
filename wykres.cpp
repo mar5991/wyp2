@@ -31,8 +31,10 @@ int main(int argc, const char **argv)
 	vector <wpis> tst=transfer(wpisy);
 	sort(tst.begin(), tst.end(), srt);
 	vector <vector <long long> > daty3;
-	fstream chart_data((root+"chart_data.ddd").c_str(), ios::trunc | ios::out);
-	fstream chart_ust((root+"chart_data.ustawienia").c_str(), ios::trunc | ios::out);
+	string pol1=root+"chart_data.ddd";
+	string pol2=root+"chart_data.ustawienia";
+	fstream chart_data((pol1).c_str(), ios::trunc | ios::out);
+	fstream chart_ust((pol2).c_str(), ios::trunc | ios::out);
 	chart_ust<<"set terminal png size 1000,600"<<endl;
 	chart_ust<<"set output \""<<root<<"galk.png\""<<endl;
 	xtics(chart_ust);
