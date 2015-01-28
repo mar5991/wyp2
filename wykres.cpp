@@ -21,7 +21,7 @@ void xtics(fstream& plik)
 int main(int argc, const char **argv) 
 {
 	root = argv[1];
-	auto lista_plikow = pliki();
+	vector<pair<int, int> > lista_plikow = pliki();
 	cout<<"wygenerowano "<<lista_plikow.size()<<endl;
 	map <int, wpis> wpisy;
 	for(int i=0; i<lista_plikow.size(); i++)

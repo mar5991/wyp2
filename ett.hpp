@@ -451,7 +451,7 @@ vector <wpis> transfer(map<int, wpis> wpisy)
 	}
 	return wynik;
 }
-bool srt(wpis& alfa, wpis& beta)
+bool srt(const wpis& alfa, const wpis& beta)
 {
 	if(alfa.plusy.size()>beta.plusy.size())
 		return true;
