@@ -323,13 +323,13 @@ IStreamWrapper(const IStreamWrapper&);
 IStreamWrapper& operator=(const IStreamWrapper&);
 std::istream& is_;
 };
-void getpagetofile(int tim, int page)
+void getpagetofile(int tim, int page, string appkey)
 {
 	stringstream stt;
 	curl_writer writer(stt);
 	curl_easy easy(writer);
 	stringstream wpix;
-	wpix<<"http://a.wykop.pl/search/entries/appkey,bBDJbqyKgY,output,clear";
+	wpix<<"http://a.wykop.pl/search/entries/appkey,"<<appkey<<",output,clear";
 	wpix<<",page,"<<page;
 	string wpi=wpix.str();
 	easy.add(curl_pair<CURLoption,string>(CURLOPT_URL,wpi.c_str()));
@@ -433,10 +433,10 @@ int getpage_to_plot(int old_time, int page, map<int, wpis>& wpisy)
 
 
 
-int getpage_bin(int akt_time, int kand_time, int page)
+int getpage_bin(int akt_time, int kand_time, int page, string code)
 {
 	map <int, wpis> wpisy;
-	getpagetofile(akt_time, page);
+	getpagetofile(akt_time, page, code);
 	int wynik = getpagefromfile(akt_time, kand_time, page, wpisy);
 	return wynik;
 }
@@ -457,7 +457,7 @@ bool srt(const wpis& alfa, const wpis& beta)
 		return true;
 	return false;
 }
-int binsearch(int akt_time, int kand_time)
+int binsearch(int akt_time, int kand_time, string code)
 {
 	int left = 1;
 	int right = 1000;
@@ -467,8 +467,8 @@ int binsearch(int akt_time, int kand_time)
 		if(right-left<2)
 		{
 			process=0;
-			int wyn_right = getpage_bin(akt_time, kand_time, right);
-			int wyn_left = getpage_bin(akt_time, kand_time, left);
+			int wyn_right = getpage_bin(akt_time, kand_time, right, code);
+			int wyn_left = getpage_bin(akt_time, kand_time, left, code);
 			if(wyn_left==0)
 				return left;
 			if(wyn_right==0)
@@ -476,7 +476,7 @@ int binsearch(int akt_time, int kand_time)
 			return left;
 		}
 		int srodek = (left+right)/2;
-		int wyn_srodek = getpage_bin(akt_time, kand_time, srodek);
+		int wyn_srodek = getpage_bin(akt_time, kand_time, srodek, code);
 		if(wyn_srodek==0)
 			return srodek;
 		if(wyn_srodek==1)
