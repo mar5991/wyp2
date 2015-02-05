@@ -408,7 +408,7 @@ int getpagefromfile(int akt_time, int kand_time, int page, map<int, wpis>& wpisy
 }
 
 
-int getpage_to_plot(int old_time, int page, map<int, wpis>& wpisy)
+int getpage_to_plot(int akt_time, int old_time, int page, map<int, wpis>& wpisy)
 {
 	cout<<old_time<<" "<<page<<endl;
 	string lol;
@@ -432,15 +432,18 @@ int getpage_to_plot(int old_time, int page, map<int, wpis>& wpisy)
 	for (int i = s1-1; i >=0 ; i--)
 	{
 		wpis nowy(d[i], old_time, 0);
-		if(wpisy.find(nowy.id)!=wpisy.end())
+		if(nowy.time>(akt_time-24*60*60)
 		{
-			if(wpisy.find(nowy.id)->second.data_download<old_time)
+			if(wpisy.find(nowy.id)!=wpisy.end())
 			{
-				wpisy[nowy.id]=nowy;
+				if(wpisy.find(nowy.id)->second.data_download<old_time)
+				{
+					wpisy[nowy.id]=nowy;
+				}
 			}
+			else
+				wpisy[nowy.id]=nowy;
 		}
-		else
-			wpisy[nowy.id]=nowy;
 	}
 }
 

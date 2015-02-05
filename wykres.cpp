@@ -26,7 +26,7 @@ int main(int argc, const char **argv)
 	map <int, wpis> wpisy;
 	for(int i=0; i<lista_plikow.size(); i++)
 	{
-		getpage_to_plot(lista_plikow[i].first, lista_plikow[i].second, wpisy);
+		getpage_to_plot(time(NULL), lista_plikow[i].first, lista_plikow[i].second, wpisy);
 	}
 	vector <wpis> tst=transfer(wpisy);
 	sort(tst.begin(), tst.end(), srt);
