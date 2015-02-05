@@ -432,7 +432,7 @@ int getpage_to_plot(int akt_time, int old_time, int page, map<int, wpis>& wpisy)
 	for (int i = s1-1; i >=0 ; i--)
 	{
 		wpis nowy(d[i], old_time, 0);
-		if(nowy.time>(akt_time-24*60*60))
+		if(nowy.data>(akt_time-24*60*60))
 		{
 			if(wpisy.find(nowy.id)!=wpisy.end())
 			{
