@@ -344,7 +344,7 @@ void send_message(string body, string obrazek, string userkey, string appkey, st
 	stringstream url;
 	url<<"http://a.wykop.pl/entries/add/appkey,"<<appkey<<",userkey,"<<userkey;
 	stringstream pagename;
-	pagename<<"xxx.txt";
+	pagename<<"xxx.atxt";
 	string bo=body+","+obrazek;
 	cout<<bo<<endl;
 	string header1=md5(sekret+url.str()+bo);
