@@ -2,7 +2,7 @@
 
 void xtics(fstream& plik)
 {
-	int time_stop = time(NULL);
+	int time_stop = time(NULL)-5400;
 	int time_start = time_stop-24*3600;
 	plik<<"set xrange ["<<time_start<<":"<<time_stop<<"]"<<endl;
 	plik<<"set xtics (";
@@ -35,7 +35,8 @@ int main(int argc, const char **argv)
 	string pol2=root+"chart_data.ustawienia";
 	fstream chart_data((pol1).c_str(), ios::trunc | ios::out);
 	fstream chart_ust((pol2).c_str(), ios::trunc | ios::out);
-	chart_ust<<"set terminal png size 1000,600"<<endl;
+	chart_ust<<"set terminal png size 1200,1000"<<endl;
+	chart_ust<<"set key outside right center"<<endl;
 	chart_ust<<"set output \""<<root<<"galk.png\""<<endl;
 	xtics(chart_ust);
 	chart_ust<<"plot";
