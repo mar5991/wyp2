@@ -15,6 +15,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/rapidjson.h"
+#include "md5.h"
 using curl::curl_easy;
 using namespace rapidjson;
 using namespace std;
@@ -323,32 +324,44 @@ IStreamWrapper(const IStreamWrapper&);
 IStreamWrapper& operator=(const IStreamWrapper&);
 std::istream& is_;
 };
-void getpagetofile(int tim, int page, string appkey)
+void getpagetofile(int tim, int page, string appkey, string sekret)
 {
-	stringstream stt;
-	curl_writer writer(stt);
-	curl_easy easy(writer);
-	stringstream wpix;
-	wpix<<"http://a.wykop.pl/search/entries/appkey,"<<appkey<<",output,clear";
-	wpix<<",page,"<<page;
-	string wpi=wpix.str();
-	easy.add(curl_pair<CURLoption,string>(CURLOPT_URL,wpi.c_str()));
-	easy.add(curl_pair<CURLoption,long>(CURLOPT_FOLLOWLOCATION,1L));
-	try 
-	{
-		easy.perform();
-	} 
-	catch (curl_easy_exception error)
-	{
-		vector<pair<string,string>> errors = error.what();
-		error.print_traceback();
-	}
+	stringstream url;
+	url<<"http://a.wykop.pl/search/entries/appkey,"<<appkey<<",output,clear";
+	url<<",page,"<<page;
 	stringstream pagename;
 	pagename<<root<<tim<<"-"<<page<<".txt";
-	fstream plik(pagename.str().c_str(), ios::out | ios::trunc);
-	plik<<stt.str();
-	plik.close();
+	string header1=md5(sekret+url.str());
+	string header="apisign: "+header1;
+	stringstream polecenie;
+	polecenie<<"wget --header=\""<<header<<"\" "<<url.str()<<" -O "<<pagename.str();
+	system(polecenie.str().c_str());
 }
+
+void send_message(string body, string obrazek, string userkey, string appkey, string sekret)
+{
+	cout<<obrazek<<endl;
+	stringstream url;
+	url<<"http://a.wykop.pl/entries/add/appkey,"<<appkey<<",userkey,"<<userkey;
+	stringstream pagename;
+	pagename<<"xxx.txt";
+	string bo=body+","+obrazek;
+	cout<<bo<<endl;
+	string header1=md5(sekret+url.str()+bo);
+	if(obrazek=="")
+		header1=md5(sekret+url.str()+body);
+	string header="apisign: "+header1;
+	stringstream polecenie;
+	stringstream post;
+	post<<"body="<<body;
+	if(obrazek!="")
+		post<<"&embed="<<obrazek;
+	polecenie<<"wget --header=\""<<header<<"\" --post-data \""<<post.str()<<"\" "<<url.str()<<" -O "<<pagename.str();
+	cout<<polecenie.str()<<endl;
+	cout<<post.str()<<endl;
+	system(polecenie.str().c_str());
+}
+
 int getpagefromfile(int akt_time, int kand_time, int page, map<int, wpis>& wpisy)
 {
 	string lol;
@@ -433,10 +446,10 @@ int getpage_to_plot(int old_time, int page, map<int, wpis>& wpisy)
 
 
 
-int getpage_bin(int akt_time, int kand_time, int page, string code)
+int getpage_bin(int akt_time, int kand_time, int page, string key, string secret)
 {
 	map <int, wpis> wpisy;
-	getpagetofile(akt_time, page, code);
+	getpagetofile(akt_time, page, key, secret);
 	int wynik = getpagefromfile(akt_time, kand_time, page, wpisy);
 	return wynik;
 }
@@ -457,7 +470,7 @@ bool srt(const wpis& alfa, const wpis& beta)
 		return true;
 	return false;
 }
-int binsearch(int akt_time, int kand_time, string code)
+int binsearch(int akt_time, int kand_time, string code, string secret)
 {
 	int left = 1;
 	int right = 1000;
@@ -467,8 +480,8 @@ int binsearch(int akt_time, int kand_time, string code)
 		if(right-left<2)
 		{
 			process=0;
-			int wyn_right = getpage_bin(akt_time, kand_time, right, code);
-			int wyn_left = getpage_bin(akt_time, kand_time, left, code);
+			int wyn_right = getpage_bin(akt_time, kand_time, right, code, secret);
+			int wyn_left = getpage_bin(akt_time, kand_time, left, code, secret);
 			if(wyn_left==0)
 				return left;
 			if(wyn_right==0)
@@ -476,7 +489,7 @@ int binsearch(int akt_time, int kand_time, string code)
 			return left;
 		}
 		int srodek = (left+right)/2;
-		int wyn_srodek = getpage_bin(akt_time, kand_time, srodek, code);
+		int wyn_srodek = getpage_bin(akt_time, kand_time, srodek, code, secret);
 		if(wyn_srodek==0)
 			return srodek;
 		if(wyn_srodek==1)
@@ -486,4 +499,5 @@ int binsearch(int akt_time, int kand_time, string code)
 	}
 	return 1;
 }
+
 
