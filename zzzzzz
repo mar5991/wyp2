@@ -1,0 +1,3 @@
+ $wget -d http://a.wykop.pl/user/login/appkey,n8J9RJlxwa --header="apisign: 265ea5b57de80ea74a3f263c54cb4e8b" --post-data "login=marc1027&accountkey=QKvKUWyXCYGbuQsFWuTh"
+
+find /path/to/files* -mtime +5 -exec rm {} \;
