@@ -283,7 +283,7 @@ struct wpis
 		mindata=min(data, mindata);
 		if(comments)
 		{
-			Value& ctt2 = dupa["comments"];
+			alue& ctt2 = dupa["comments"];
 			for(int i=0; i<ctt2.Size(); i++)
 			{
 				komentarze.push_back(komentarz(ctt2[i]));
