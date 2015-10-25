@@ -64,7 +64,7 @@ fs.readdir(process.argv[2], function (err, files) {
 	  	for(var i in dat3)
 	  	{
 	  		var ddd = new Date();
-	  		if(ddd-Date.parse(dat3[i].date)<1000*60*60*24*7)
+	  		if(ddd-Date.parse(dat3[i].date)<1000*60*60*24*1)
 	  		{
 	  			dat4[licz] = dat3[i];
 	  			licz++;

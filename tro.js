@@ -1,12 +1,13 @@
 var exec = require('child_process').exec;
 var cmd = "wget -O- -d http://a.wykop.pl/user/login/appkey,n8J9RJlxwa --header=\"apisign: 265ea5b57de80ea74a3f263c54cb4e8b\" --post-data \"login=marc1027&accountkey=QKvKUWyXCYGbuQsFWuTh\"";
-var cmd2 = "./wysylanie \"no elo to jest test z wypokapi #test\" ";
-var cmd3 = " n8J9RJlxwa a7ZItda0z8";
+var cmd2 = "./wyslanie \"#drogadogoracych #bot\" ";
+var cmd3 = " n8J9RJlxwa a7ZItda0z8 http://vps134914.ovh.net/wyszuk/galk.png";
 
 exec(cmd, function(error, stdout, stderr) {
 	var p = JSON.parse(stdout);
 	exec(cmd2+p.userkey+cmd3, function(error, stdout, stderr) {
-		console.log(stdout);
+		console.log(JSON.stringify(stdout));
+		console.log(JSON.stringify(stderr));
 	});
 });
 /*
