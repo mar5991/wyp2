@@ -54,7 +54,8 @@ fs.readdir(process.argv[2], function (err, files) {
 	  {
 	  	var d = new Date(Date.parse(dat2[i].date));
 	  	dat2[i].realDate = d;
-	  	dat3[dat2[i].id]=dat2[i];
+	  	if(dat3[dat2[i].id]==undefined || dat3[dat2[i].id].voters_count<dat2[i].voters_count)
+	  		dat3[dat2[i].id]=dat2[i];
 	  }
 	  licznik++;
 	  if(licznik==files.length)
